@@ -19,6 +19,9 @@ response = session_requests.get('https://www.utahcounty.gov/landrecords/property
 soup = BeautifulSoup(response.content, "html.parser")
 soup
 
+data_fp = os.path.join('data', 'address_point.csv')
+address = pd.read_csv(data_fp)
+
 def scraper():
     url = "https://www.utahcounty.gov/landrecords/SerialVersions.asp?av_serial=01:002:0001"
     response = requests.get(url)
