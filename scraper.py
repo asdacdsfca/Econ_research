@@ -23,7 +23,8 @@ def requests_attempt(url):
     response = session_requests.get(url, headers=headers_dict)
     soup = BeautifulSoup(response.content, "html.parser")
     name_ind = set(find_names(soup))
-    names.update({"": name_ind})
+    address = find_address(soup)
+    names.update({address: name_ind})
     
     
 
@@ -55,3 +56,12 @@ def find_names(soup):
         name = splited_2[0]
         names_store.append(name)
     return names_store
+
+def find_address(soup):
+    name = ''
+    string_soup = str(soup)
+    address_list = string_soup.split("Property Address:</strong>")[1:]
+    for i in address_list:
+        splited_1 = i.split("<")
+        name = splited_1[0]
+    return name
