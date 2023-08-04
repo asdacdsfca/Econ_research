@@ -19,12 +19,19 @@ headers_dict = {
 names = dict()
 
 def requests_attempt(url):
+    names = dict()
+    address_dict = dict()
     session_requests = requests.session()
     response = session_requests.get(url, headers=headers_dict)
     soup = BeautifulSoup(response.content, "html.parser")
     name_ind = set(find_names(soup))
+    name_ind = list(name_ind)
     address = find_address(soup)
-    names.update({address: name_ind})
+    names['Owners'] = name_ind
+    address_dict['Address'] = address
+    dataframe = pd.DataFrame({**names, **address_dict})
+    x = pd.concat([final_df, dataframe], axis = 1)
+    return x
     
     
 
@@ -68,3 +75,11 @@ def find_address(soup):
 
 # Hello
 #test
+
+df = pd.concat(lst_dataframe)
+df = df.set_index('Address')
+df
+
+data_fp2 = os.path.join('data', 'Utah_Utah_County_Parcels.csv')
+parcels = pd.read_csv(data_fp2)
+serial = list(parcels['PARCEL_ID'])
